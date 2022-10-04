@@ -9,7 +9,7 @@ export function Post() {
             className={styles.avatar}
             src="https:github.com/hernanytec.png"
           />
-          <div className={styles.auhtorInfo}>
+          <div className={styles.authorInfo}>
             <strong>Hernany Costa</strong>
             <span>Frontend Developer</span>
           </div>
@@ -33,7 +33,9 @@ export function Post() {
         </p>
 
         <p>
-          <a href="#"> #novoprojeto #nlw #rocketseat</a>
+          <a href="#">#novoprojeto </a>
+          <a href="">#nlw </a>
+          <a href="">#rocketseat</a>
         </p>
       </div>
     </article>
