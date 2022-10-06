@@ -30,7 +30,7 @@ const posts = [
     publishedAt: new Date("2022-10-03 23:08:00"),
   },
   {
-    id: 1,
+    id: 2,
     author: {
       avatarUrl: "https:github.com/diego3g.png",
       name: "Diego Fernandes",
@@ -62,6 +62,7 @@ export function App() {
 
       <div className={styles.wrapper}>
         <Sidebar />
+
         <main>
           {posts.map((post) => (
             <Post
