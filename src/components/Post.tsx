@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from "react";
 import { format, formatDistanceToNow } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
 import { Avatar } from "./Avatar";
@@ -6,7 +6,24 @@ import { Comment } from "./Comment";
 
 import styles from "./Post.module.css";
 
-export function Post({ author, publishedAt, content }: any) {
+interface Author {
+  name: string;
+  role: string;
+  avatarUrl: string;
+}
+
+interface Content {
+  type: "paragraph" | "link";
+  content: string;
+}
+
+interface PostProps {
+  author: Author;
+  publishedAt: Date;
+  content: Content[];
+}
+
+export function Post({ author, publishedAt, content }: PostProps) {
   const [comments, setComments] = useState(["Muito bom, parabéns!! "]);
   const [newCommentText, setNewCommentText] = useState("");
 
@@ -21,14 +38,14 @@ export function Post({ author, publishedAt, content }: any) {
     addSuffix: true,
   });
 
-  function handleCreateNewComment(e: any) {
+  function handleCreateNewComment(e: FormEvent) {
     e.preventDefault();
 
     setComments((prevState) => [...prevState, newCommentText]);
     setNewCommentText("");
   }
 
-  function deleteComment(commentToDelete: any) {
+  function deleteComment(commentToDelete: string) {
     const commentsWithoutDeletedOne = comments.filter(
       (comment) => comment !== commentToDelete
     );
@@ -36,12 +53,12 @@ export function Post({ author, publishedAt, content }: any) {
     setComments(commentsWithoutDeletedOne);
   }
 
-  function handleNewCommentChange(e: any) {
+  function handleNewCommentChange(e: ChangeEvent<HTMLTextAreaElement>) {
     e.target.setCustomValidity("");
     setNewCommentText(e.target.value);
   }
 
-  function handleNewCommentInvalid(e: any) {
+  function handleNewCommentInvalid(e: InvalidEvent<HTMLTextAreaElement>) {
     e.target.setCustomValidity("Esse campo é obrigatório!");
   }
 
@@ -67,7 +84,7 @@ export function Post({ author, publishedAt, content }: any) {
       </header>
 
       <div className={styles.content}>
-        {content.map((item: any) => {
+        {content.map((item: Content) => {
           if (item.type === "paragraph") {
             return <p key={item.content}>{item.content}</p>;
           } else if (item.type === "link") {
