@@ -21,12 +21,20 @@ export function Post({ author, publishedAt, content }: any) {
     addSuffix: true,
   });
 
-  const handleCreateNewComment = (e: any) => {
+  function handleCreateNewComment(e: any) {
     e.preventDefault();
 
     setComments((prevState) => [...prevState, newCommentText]);
     setNewCommentText("");
-  };
+  }
+
+  function deleteComment(commentToDelete: any) {
+    const commentsWithoutDeletedOne = comments.filter(
+      (comment) => comment !== commentToDelete
+    );
+
+    setComments(commentsWithoutDeletedOne);
+  }
 
   return (
     <article className={styles.post}>
@@ -77,7 +85,11 @@ export function Post({ author, publishedAt, content }: any) {
 
       <div className={styles.commentList}>
         {comments.map((comment) => (
-          <Comment key={comment} content={comment} />
+          <Comment
+            key={comment}
+            content={comment}
+            onDeleteComment={deleteComment}
+          />
         ))}
       </div>
     </article>
