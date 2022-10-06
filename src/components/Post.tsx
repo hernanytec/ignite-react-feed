@@ -1,41 +1,50 @@
+import { format, formatDistanceToNow } from "date-fns";
+import ptBR from "date-fns/locale/pt-BR";
 import { Avatar } from "./Avatar";
 import { Comment } from "./Comment";
 import styles from "./Post.module.css";
 
-export function Post() {
+export function Post({ author, publishedAt, content }: any) {
+  const publishedDateFormatted = format(
+    publishedAt,
+    "d 'de' LLLL 'às' HH:hh'h'",
+    { locale: ptBR }
+  );
+
+  const publihedDateRelativeToNow = formatDistanceToNow(publishedAt, {
+    locale: ptBR,
+    addSuffix: true,
+  });
+
   return (
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
-          <Avatar hasBorder src="https:github.com/hernanytec.png" />
+          <Avatar hasBorder src={author.avatarUrl} />
           <div className={styles.authorInfo}>
-            <strong>Hernany Costa</strong>
-            <span>Frontend Developer</span>
+            <strong>{author.name}</strong>
+            <span>{author.role}</span>
           </div>
         </div>
 
-        <time title="03 de Outubro às 23:08h" dateTime="2022-03-10 23:08:00">
-          Publicado há 1h
+        <time
+          title={publishedDateFormatted}
+          dateTime={publishedAt.toISOString()}
+        >
+          {publihedDateRelativeToNow}
         </time>
       </header>
 
       <div className={styles.content}>
-        <p>Fala galeraa 👋</p>
-
-        <p>
-          Acabei de subir mais um projeto no meu portifa. É um projeto que fiz
-          no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀
-        </p>
-
-        <p>
-          👉 <a href="">jane.design/doctorcare</a>
-        </p>
-
-        <p>
-          <a href="#">#novoprojeto </a>
-          <a href="">#nlw </a>
-          <a href="">#rocketseat</a>
-        </p>
+        {content.map((item: any) => {
+          if (item.type === "paragraph") return <p>{item.content}</p>;
+          else if (item.type === "link")
+            return (
+              <a href="#">
+                <p>{item.content}</p>
+              </a>
+            );
+        })}
       </div>
 
       <form className={styles.commentForm}>
